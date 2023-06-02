@@ -1,0 +1,38 @@
+<!-- basket.html -->
+{% extends 'base.html' %}
+{%    load static    %}
+
+{% block title %}Basket{% endblock %}
+
+{% block content %}
+<h1>Your Basket</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Product Name</th>
+      <th>Price</th>
+    </tr>
+  </thead>
+  <tbody id="basket-items">
+    
+  </tbody>
+</table>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+const basketItemsElement = document.getElementById('basket-items');
+const basket = JSON.parse(localStorage.getItem('basket')) ||[];
+
+basket.forEach(product => {
+  const row = document.createElement('tr');
+  const nameCell = document.createElement('td');
+  nameCell.textContent = product.name;
+  const priceCell = document.createElement('td');
+  priceCell.textContent = product.price;
+  row.appendChild(nameCell);
+  row.appendChild(priceCell);
+  basketItemsElement.appendChild(row);
+});
+</script>
+{% endblock %}
