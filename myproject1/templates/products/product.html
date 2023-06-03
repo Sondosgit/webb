@@ -30,7 +30,10 @@
 
 
                         
-                          <button type="submit" id="add-to-basket-button">Add to Basket</button>
+                        <div class="d-flex justify-content-between">
+                          <button type="submit" id="add-to-basket">Add to Basket</button>
+                          <a href="{% url 'basket_view' %}" class="btn btn-primary">View basket</a>
+                        </div>
                         </form>
                         
                           
@@ -47,9 +50,6 @@
 
     </form>
 
-
-{%endblock%}
-{% block extra_scripts %}
 <script>
 const addToBasketButton = document.getElementById('add-to-basket');
 
@@ -67,6 +67,27 @@ addToBasketButton.addEventListener('click', () => {
   basket.push(product);
 
   localStorage.setItem('basket', JSON.stringify(basket));
+
+  $.ajax({
+    type: 'POST',
+    url: '{% url "basket_add" %}',
+    data: {
+      productid: '{{ product.id }}',
+      productqty: $('#select option:selected').text(),
+      csrfmiddlewaretoken: "{{csrf_token}}",
+      action: 'post'
+    },
+    success: function (json) {
+      console.log('Product added to basket.');
+    },
+    error: function (xhr, errmsg, err) {
+      console.error('Error adding product to basket.');
+    }
+  });
 });
 </script>
+
+
+
+
 {% endblock %}
